@@ -1,0 +1,72 @@
+\documentclass{rapportCS}
+\usepackage{lipsum}
+\title{Rapport CentraleSupelec - Template} %Titre du fichier
+
+\begin{document}
+
+%----------- Informations du rapport ---------
+
+\logoentreprise{logos/logoGraphene.png}
+
+\titre{} % Titre du fichier
+
+\mention{Cursus ingénieur} % Nom de la Mention
+\trigrammemention{ING2} % Pour le bas de la page
+\master{Génie des Systèmes d'Information} % Nom du master
+\filiere{Seconde année} % Nom de la filière
+
+% Informations tuteurs écoles
+%%\tuteurecole{
+%    Mention : \textsc{Prénom Nom} \\
+%    prenom.nom@centralesupelec.fr \\
+%    Filière : \textsc{Prénom Nom} \\ 
+%    prénom.nom@gmail.com 
+%} 
+
+%%\tuteurentreprise{
+%    \textsc{Prénom Nom} \\
+%    prénom.nom@entreprise.com 
+%}
+
+%----------- Initialisation -------------------
+        
+\fairemarges %Afficher les marges
+\fairepagedegarde %Créer la page de garde
+
+%----------- Résumé -------------------
+%\vspace*{\stretch{1}}
+%\begin{center}
+%	\begin{abstract}
+%        
+%    \end{abstract}
+%\end{center}
+%\vspace*{\stretch{1}}
+%\newpage
+
+%------------ Table des matières ----------------
+\newpage
+\bgroup
+\pagestyle{empty}
+\makenomenclature
+\pagestyle{fancy}
+\fancyheadoffset{0.5cm}
+%\lhead{\includegraphics[scale=0.2]{logos/CSxParisSaclay.jpg}} %Affichage de l'image au top de la page
+\rhead{\nouppercase{\leftmark}}
+\cfoot{\textbf{\titre}}
+\rfoot{}
+\lfoot{\trigrammemention}
+\tabledematieres 
+\clearpage
+\egroup 
+
+
+%############## Corps du rapport ##############
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%       Bibliographie       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\appendix
+%\include{src/annexe}
+
+\end{document}

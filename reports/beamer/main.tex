@@ -1,0 +1,58 @@
+\documentclass[compress]{beamer} %en animé
+%\documentclass[trans]{beamer} %en superposé
+
+%%%%%%%%%%%%%% LES PACKAGES
+\input{config/les_packages_pour_beamer.tex}
+
+%%%%%%%%%%%%%% THEME BEAMER
+\newcommand{\initiales}{Ryan Bouchou}
+\input{config/les_param_beamer_tipe}
+
+%%%%%%%%%%%%%% MA PALETTE DE COULEURS
+\input{config/la_palette.tex}
+
+%%%%%%%%%%%%%% PERSONAL COMMANDS
+\input{config/commands.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%
+
+%entre crochet le titre court pour l'en tête puis le vrai titre
+\title[Classification EEG BCI IV 2a]{
+Classification EEG de l'Imagerie Motrice :\\
+{\large Deep Learning appliqué à la Neuro-ingénierie}
+}
+\author{
+\large 
+Présentation de \important{Ryan BOUCHOU}\\[0.2cm]
+%\footnotesize
+%travail réalisé avec \couleur{binôme}\\[0.4cm]
+\vspace*{-0.6cm}
+} 
+
+%entre crochet la short date pour l'en-tête
+\date[Mai 2025]{\vspace*{-2.5cm}19 juin 2025}
+
+\institute[HEPL \& CY TECH]{\vspace*{-2cm}\includegraphics[scale=0.2]{config/img/logo.png}}
+
+%------------------------------------------------
+\begin{frame}[plain]
+\titlepage 
+\addtocounter{framenumber}{-1} 
+\end{frame}
+
+%------------------------------------------------
+\title[Classification EEG]{
+Une page de titre avec logos :\\
+{\large mais sans les affectations détaillées des auteurs }
+}
+
+%------------------------------------------------
+
+
+\include{src/header}
+\include{src/section1}
+\include{src/section2}
+\end{document}
