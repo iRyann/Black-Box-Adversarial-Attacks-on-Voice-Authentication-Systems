@@ -1,142 +1,137 @@
-# Black-Box Adversarial Attacks on Voice Authentication Systems
+# Black-Box Adversarial Attacks on Voice Authentication — Plan Final
 
-## Résumé
+> Analyser *Breaking Security-Critical Voice Authentication* (Kassis & Hengartner, 2023) et évaluer si les transformations audio F1/F4/F6 conservent leur efficacité face aux spoofs générés par TTS/VC modernes (2025).
 
--> Résumé du travail académique mêné, consistant en l'étude et l'exploitation d'un article de recherche dans le champs de l'IA appliquée à la Cybersécurité.
-Objectifs :
+## Contexte & Question de recherche
 
-- Comprendre, et apprécier la dynamique globale de l'article.
-- Se saisir des modèles, de leur intention d'usage, de leur pertinence, et évaluer les résultats présenter au regard des métriques choisies par les auteurs.
-- Expliquer les modèles utilisés, leur fonctionnement (de façon succinte), et les enjeux connexes.
-- Apprécier l'article dans le contexte récent, et relativement à l'évolution de l'état de l'art.
-- Confronter l'état de l'art avec le contenu (ie l'attaque) de l'article (où inversemment, c'est la même chose).
-- Conclure et ouvrir sur les perspectives du domaine.
+### Problématique
+- 2023 : L'article démontre qu'on peut tromper ASV+CM via 7 transformations audio (F1-F7)
+- 2025 : Les TTS/VC ont progressé (naturalité accrue) : **les heuristiques F sont-elles obsolètes ?**
 
-## Introduction
+### Hypothèse
+> Les spoofs modernes (Coqui TTS, 2025) sont suffisamment naturels pour que F1/F4/F6 n'apportent aucun gain en attaque.
 
-### Contexte de la thématique
+### Approche
+Comparaison expérimentale minimaliste :
+- S_baseline : 12 audios bonafide (VoxCeleb)
+- S_spoof : 12 spoofs
+- S_spoof+F : S_spoof après application F1/F4/F6
+- Métriques : Similarité ASV (cosine) + Détectabilité CM (scores)
 
-La sécurité des systèmes : un enjeu critique, globalisé, et à toutes les échelles => À cet effet : des protocoles de sécurité tels que l'authentification vocale, utilisée à auteur de <parts de marché des acteurs majeurs> et sur lesquels reposent des systèmes d'informations de tous les secteurs (eg bancaire,<à détailler>) -- le tout, représentant des milliards (valorisations, fonds, etc.).
-Problématique : Développement rapide de l'IA, avec des progrès notables en matière de production de _faux_ ; et subséquemment, l'avènement d'une période aux risques d'usurpation extrêmes.
-
-### Sujet d'étude
-
--> L'article, ses auteurs et leur réalisation : Breaking Security-Critical Voice Authentication.
-Une attaque agnostique, boite noire, et générique, des systèmes d'authentification vocale en condition de sécurité critique, parachevée par exploitation sur canal téléphoniques.
-
-### Éléments de propédeutique
-
-Préciser les termes clés, les concepts indispensables pour apprécier la thématique, et son approche ; ainsi que les éléments qui seront mentionnés au cours de la présentation.
-
-## Revue analytique de l'article
-
-Objectif : témoigner d'une lecture critique de ce dernier.
-
-### Cible
-
-VA, en particulier CMs passifs, la faillibilité des ASV étant établie.
+## Analyse critique de l'article
 
 ### Contributions principales
+1. Attaque black-box universelle : 6 requêtes suffisent, temps réel, transférable
+2. Transformations simples mais efficaces : F1-F7 (silences, échos, filtrage, bruit)
+3. Validation end-to-end : ASV+CM+STT, dont Amazon Connect (production)
+4. Robustesse : Survit à la téléphonie (8 kHz, codec GSM)
 
-Citation de l'article :
+### Limites identifiées
+- Dataset historique : ASVspoof2019 (spoofs "basiques" vs. SOTA 2025)
+- F7 coûteuse : Nécessite un ASV "shadow" (accès partiel)
+- Défenses non testées : Adversarial training, détection multimodale
+- Éthique : Pas de guidelines sur l'usage responsable
 
-> Our attack can circumvent any state-of-the-art VA
-> platform implementing the authentication protocol
-> in its strictest form and is fully black-box, query-
-> efficient, real-time, model-agnostic (transferable), and
-> targeted.
-> Our attack is effective against the full VA stack.
-> Robustness to various defenses
+### Positionnement dans l'état de l'art
 
-Code source des auteurs disponible [ici](https://github.com/andrekassis/Breaking-Security-Critical-Voice-Authentication)
+- Génération vocale (2019 - 2025) :
+   - 2019 : Tacotron 2, WaveNet (détectables via artefacts spectraux)
+   - 2023 : VALL-E, YourTTS (zero-shot, prosodie naturelle)
+   - 2025 : Coqui XTTS v2, ElevenLabs v3 (indistinguables humains sur benchmarks)
 
-1. **Nouvelle attaque universelle**
-   - Fonctionne en black-box (aucun accès interne au modèle).
-   - **Temps réel**, **query-efficient** (≤ 6 essais suffisent).
-   - Cible les **CMs**, maillon faible des VA modernes.
-2. **Transformations audio simples mais efficaces**
-   - Ajout de silences “naturels” et d’échos.
-   - Amplification de certaines fréquences.
-   - Suppression de bruits caractéristiques des voix synthétiques.  
-      → Résultat : les signaux trompent les détecteurs sans dégrader l’empreinte vocale ni le texte.
-3. **Expérimentation large**
-   - Testé contre 14 contre-mesures (CMs), 5 ASVs (dont Amazon Voice ID), STTs commerciaux (Google & Azure).
-   - Succès jusqu’à 99 % avec seulement 6 tentatives.
-   - Première démonstration d’attaque ciblée par téléphone (over-telephony)
-4. **Validation humaine** : Même des juges humains n’arrivent pas à distinguer les enregistrements falsifiés.
-5. **Impact sécurité** : Met en doute la fiabilité des systèmes de biométrie vocale, largement déployés dans les services financiers.
+-Contre-mesures (CM) :
+   - 2019 : GMM-based, LFCC (vulnérables aux transformations)
+   - 2023 : AASIST, Wav2Vec 2.0 SSL (robustes au bruit)
+   - 2025 : Transformers multimodaux (audio + texte + contexte)
 
-### Hypothèses
+- Défenses émergentes (post-2023) :
+   - Watermarking neural (AudioSeal, WavMark)
+   - Détection zero-shot (CLAP embeddings)
+   - Certification probabiliste (randomized smoothing)
 
-- H1: There exist identifiable, removable, and universal key
-  differences between human and machine speech.
-- H2: These nuances are among the primary telltales on which
-  CMs rely to make their decision
+## Protocole expérimental
 
-### Protocole
+### Données
+- Bonafide : 12 fichiers VoxCeleb (4 speakers × 3 utterances, 3-5s/utterance)
+   - Critères : Mono 16 kHz, anglais, qualité studio, speakers distincts (2M/2F)
 
-1. **Jeu de données audio**
-   - ASVspoof2019,
-2. **Génération de voix synthétique (Spoofing)**
-   - Modèle de **speech synthesis (SS)** ou **voice conversion (VC)**.
-3. Transformations audio (les F1–F7 de l’article)\*\*
-   - Silences naturels, ajout d’échos, filtrage fréquentiel, réduction de bruit, etc.
-   - Librairies:
-     - Librosa,
-     - SciPy,
-     - PyTorch Audio.
-   - Sept transformations principales (F1–F7) :
-     - F1/F2 = gestion des silences.
-     - F3/F5 = amplification fréquentielle.
-     - F4 = ajout d’écho local.
-     - F6 = réduction/remplacement du bruit.
-     - F7 = régularisation via un modèle ASV “shadow”.
+- Spoofs : Générés via Coqui TTS (XTTS v2, zero-shot), IndexTTS, ...
+   - Input : Texte des 12 utterances bonafide + 3s d'audio référence/speaker
+   - Output : 12 fichiers `.wav` (même format que bonafide)
 
-- Ensemble de ces modifs = **adversarial spoofing audio** crédible.
-- **Tests / validation**
-  - ASVspoof challenge.
+### Transformations
+Évaluation en l'absence des transformations, puis en ablation.
 
-### Résultats
+### Évaluation
 
-- Attaque réussie contre l’ASV Amazon Connect Voice ID.
-- WAV2VEC (CM récent, robuste au bruit téléphonique) passe de 1,8 % (baseline) à 11,6 % de succès sous attaque.
-- 99 % de réussite sur d’autres combinaisons ASV+CM+STT.
-  D'autres résultats sont exploitables, notamment les taux de réussites selon les technos et au gré des couches (F1, F2, ...) appliquées.
+- ASV - Similarité locuteur** :
+   - Modèle : Resemblyzer (GE2E, embeddings 256-d)
+   - Métrique : Cosine similarity (bonafide vs. spoof)
+   - Seuil d'acceptation : Médiane des cosines intra-speaker bonafide
 
-### Conclusion et ouverture
+- CM - Détection spoof :
+   - Modèle : AASIST (pré-entraîné ASVspoof2021, depuis repo upstream), ou tout autre jugé pertinent
+   - Métrique : Score CM (bonafide=1, spoof=0) + distribution
 
-Les systèmes manquent manifestement de robustesse, Amazon a pris des mesures (CM) suite à l'article.
 
-## Exploitation
 
-### Points d'ancrages
+### 4.3 Analyses complémentaires
+- **Spectrogrammes** : Visualiser F1/F4/F6 (avant/après)
+- **Écoute humaine** : Vous deux + 2 volontaires (20 échantillons aléatoires)
+- **Ablation** : Tester F1-only, F4-only, F6-only (si temps)
 
-Il s'agit d'un article de 2021, utilisant des audios spoof de 2019. Depuis, l'état de l'art en matière de génération IA a considérablement évolué, et on se doute que les systèmes d'authentification vocale aussi.
-Sur la base de constat simple, il semble intéressant, moins de reproduire la pipeline de l'article, que de confronter cette dernière aux derniers VAS exploitables (open-sources ? gratuit ?), ou à défaut de possibilité, évaluer la pertinence de la pipeline (ie des transformations F) au vu de l'_humanisation_ des audios qui découle des progrès réalisés en matière d'IA générative.
+## Limitations & perspectives
 
-### Évolution de l'état de l'art
+### Limitations du MVP
+- **Échantillon réduit** : 12 utterances (tendance, pas généralisation)
+- **1 TTS** : SOTA mais pas ElevenLabs/Azure
+- **1 CM** : AASIST (pas les 14 de l'article)
+- **Pas de STT** : Intelligibilité non mesurée (assume préservée)
+- **Pas de téléphonie** : Simulation 8 kHz non testée
 
-- Sur la base des techniques utilisés lors de la générations des audios spoof du dataset ASVSpoofing 2019, quelle est l'évolution de l'état de l'art quant à ces dernières, et que se fait-il en matières de Speech Synthesis et de Voice Cloning ?
-- Quels sont les systèmes d'authentification vocale en condition de sécurité critique à l'état de l'art, et quelles ont été leur évolution depuis 2021 ?
+### Ouverture
+**Défenses post-2023** :
+- Adversarial training avec spoofs augmentés (F1-F7)
+- Détection multi-task (CM + STT + prosodie)
+- Watermarking obligatoire (réglementation EU AI Act)
 
-### Protocole
+**Attaques futures** :
+- Adaptation en ligne (reinforcement learning)
+- Attaques multimodales (voix + vidéo deepfake)
+- Bypass des watermarks (model inversion)
 
-Il semble intéressant de considérer des audios utilisés par les auteurs de l'article, afin de générer des spoof sur la base des bonified avec les modèles de génération vocale à l'état de l'art ; et ce, afin de dénoter la pertinence des transformations (et à fortiori les taux d'acceptabilité des VAS).
-Pour ce faire :
+**Enjeux sociétaux** :
+- Biométrie vocale en production (banques, santé) -> risques réels
+- Course aux armements défense/attaque
+- Besoin de certification formelle (FIDO Alliance, ISO 30107)
 
-- On considère un sous-ensemble du sous-ensemble déjà considéré par les auteurs.
-- On exploite les enregistrements réels afin de générer des spoof avec un, ou deux, modèles à l'état de l'art.
-- On confronte les audios générés à quelques ASV, VAS (ie tout le systèmes, de l'ASV au STT) ?
-- On dénote les résultats en appliquant les transformations F, ou non.
+## Livrables
 
-### Expérimentation
+### Rapport (5-7 pages)
 
-Il faut se renseigner sur Google Cloud ou Azure pour le STT, et concernant un usage gratuit de ces derniers pour notre expérimentation.
+### Présentation (15 + 5 min)
+- **Subsomption** : Problématique, article, protocole, résultats, conclusion
+- **Démo live** : Écoute bonafide -> spoof -> spoof+F
+- **Q&A** (5 min)
 
-### Résultats
+### Code
 
-À voir !
+## Checklist
 
-## Conclusion et ouverture
+### MVP
+- [ ] **12 bonafide** VoxCeleb téléchargés et validés (écoute)
+- [ ] **12 spoofs** Coqui générés (qualité acceptable)
+- [ ] **F1/F4/F6** implémentés et testés (1 fichier transformé manuellement)
+- [ ] **Resemblyzer** : cosines calculées pour 3 conditions
+- [ ] **AASIST** : scores calculés pour 3 conditions
+- [ ] **Tableaux** : Metrics.csv complet (moy ± std)
+- [ ] **Figures** : 2 spectrogrammes + 1 boxplot cosines
+- [ ] **Rapport** : 5-7 pages, structure complète
+- [ ] **Slides** : 5 slides + démo audio prête
 
-À voir plus tard !
+---
+
+## Références clés
+
+1. Kassis, A., Hengartner, U. **Breaking Security-Critical Voice Authentication.** *IEEE Symposium on Security and Privacy (S&P)*, 2023. 
+2. Repo officiel : `github.com/andrekassis/Breaking-Security-Critical-Voice-Authentication`
