@@ -1,0 +1,3 @@
+[submodule "external/Breaking-Security-Critical-Voice-Authentication"]
+	path = external/Breaking-Security-Critical-Voice-Authentication
+	url = https://github.com/andrekassis/Breaking-Security-Critical-Voice-Authentication.git
