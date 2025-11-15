@@ -1,7 +1,12 @@
+import io
 import json
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
+import soundfile as sf
+from datasets import load_dataset
+from tqdm import tqdm
 
 
 def parse_demo_configs():
@@ -72,5 +77,57 @@ def parse_demo_configs():
     return adv_ids, bonafide_ids, all_needed_ids
 
 
+def dowload_bonafide(adv_ids):
+    """
+    Télécharge un bonafide par speaker présent dans la liste d'ADV.
+    On matche par speaker_id (et pas par audio_file_name),
+    et on décode les FLAC à partir des bytes du dataset HuggingFace.
+    """
+    df = load_dataset("Bisher/ASVspoof_2019_LA", split="test").to_pandas()
+
+    # key == 0 <=> bonafide dans ce dataset HF
+    df_bonafide = df[df["key"] == 0].copy()
+
+    # Récupérer les lignes ADV pour connaître les speakers concernés
+    adv_rows = df[df["audio_file_name"].isin(adv_ids)]
+    speakers = adv_rows["speaker_id"].unique().tolist()
+
+    Path("data/bonafide").mkdir(parents=True, exist_ok=True)
+
+    dowloaded = 0
+    missing = []
+
+    for spk in tqdm(speakers, desc="Dowloading bonafide by speaker"):
+        # Tous les bonafide de ce speaker
+        spk_samples = df_bonafide[df_bonafide["speaker_id"] == spk]
+
+        if len(spk_samples) == 0:
+            print(f"Aucun bonafide trouvé pour le speaker {spk}")
+            missing.append(spk)
+            continue
+
+        line = spk_samples.iloc[0]
+
+        audio_dict = line["audio"]  # {'bytes': ..., 'path': ...}
+        audio_bytes = audio_dict["bytes"]
+
+        # Décodage FLAC à partir des bytes
+        data, sr = sf.read(io.BytesIO(audio_bytes))
+
+        # Normalisation / cast optionnel
+        data = np.asarray(data, dtype=np.float32)
+
+        output_path = Path(f"data/bonafide/{spk}.wav")
+        sf.write(output_path, data, sr)
+
+        dowloaded += 1
+
+    if missing:
+        pd.DataFrame({"speaker_id": missing}).to_csv(
+            "data/metadata/bonafide_missing.csv", index=False
+        )
+
+
 if __name__ == "__main__":
     adv_ids, bonafide_ids, all_needed_ids = parse_demo_configs()
+    dowload_bonafide(adv_ids)
