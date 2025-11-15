@@ -1,0 +1,15 @@
+torch==2.9.0+cpu
+torchaudio==2.9.0+cpu
+torchvision==0.24.0+cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+speechbrain
+librosa
+soundfile
+scipy
+numpy
+pandas
+matplotlib
+requests
+tqdm
+pyyaml
