@@ -1,11 +1,13 @@
 import io
 import json
+from os import system
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import soundfile as sf
 from datasets import load_dataset
+from pandas.io.parsers.readers import CSVEngine, csv
 from tqdm import tqdm
 
 
@@ -21,6 +23,7 @@ def parse_demo_configs():
 
     # Extraction tous les samples
     all_samples = []
+    adv_trial_paths = []
 
     # Conf1 : format {T1: "LA_E_8741617-ADV", ...}
     for trial_id, sample_id in conf1.items():
@@ -36,6 +39,9 @@ def parse_demo_configs():
                 "trial_id": trial_id,
             }
         )
+        if condition == "ADV":
+            trial_adv_path = f"data/demo_sample/wavs1/{trial_id}.wav"
+            adv_trial_paths.append((trial_adv_path, file_id))
 
     # Conf2 : format {T1A: "LA_E_4468511-bonafide", T1B: "LA_E_8231152-bonafide", ...}
     for trial_id, sample_id in conf2.items():
@@ -51,6 +57,10 @@ def parse_demo_configs():
                 "trial_id": trial_id,
             }
         )
+
+        if condition == "ADV":
+            trial_adv_path = f"data/demo_sample/wavs2/{trial_id}.wav"
+            adv_trial_paths.append((trial_adv_path, file_id))
 
     df = pd.DataFrame(all_samples)
     adv_ids = df[df["condition"] == "ADV"]["file_id"].unique()
@@ -74,6 +84,9 @@ def parse_demo_configs():
         "data/metadata/all_needed_ids.csv", index=False
     )
 
+    for adv_trial_path, file_id in adv_trial_paths:
+        system(f"mv {adv_trial_path} ../../spoof_adv/{file_id}.wav")
+
     return adv_ids, bonafide_ids, all_needed_ids
 
 
@@ -96,6 +109,7 @@ def dowload_bonafide(adv_ids):
 
     dowloaded = 0
     missing = []
+    file_speaker_pairs = {}
 
     for spk in tqdm(speakers, desc="Dowloading bonafide by speaker"):
         # Tous les bonafide de ce speaker
@@ -107,7 +121,7 @@ def dowload_bonafide(adv_ids):
             continue
 
         line = spk_samples.iloc[0]
-
+        file_speaker_pairs[line["audio_file_name"]] = line["speaker_id"]
         audio_dict = line["audio"]  # {'bytes': ..., 'path': ...}
         audio_bytes = audio_dict["bytes"]
 
@@ -127,7 +141,11 @@ def dowload_bonafide(adv_ids):
             "data/metadata/bonafide_missing.csv", index=False
         )
 
+    pd.DataFrame(file_speaker_pairs).to_csv(
+        "data/metadata/file_speaker_pairs.csv", index=False
+    )
+
 
 if __name__ == "__main__":
     adv_ids, bonafide_ids, all_needed_ids = parse_demo_configs()
-    dowload_bonafide(adv_ids)
+    # dowload_bonafide(adv_ids)
