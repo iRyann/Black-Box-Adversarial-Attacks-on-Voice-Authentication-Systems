@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 import soundfile as sf
 from datasets import load_dataset
-from pandas.io.parsers.readers import CSVEngine, csv
 from tqdm import tqdm
 
 
@@ -85,12 +84,12 @@ def parse_demo_configs():
     )
 
     for adv_trial_path, file_id in adv_trial_paths:
-        system(f"mv {adv_trial_path} ../../spoof_adv/{file_id}.wav")
+        system(f"mv {adv_trial_path} data/spoof_adv/{file_id}.wav")
 
     return adv_ids, bonafide_ids, all_needed_ids
 
 
-def dowload_bonafide(adv_ids):
+def download_bonafide(adv_ids):
     """
     Télécharge un bonafide par speaker présent dans la liste d'ADV.
     On matche par speaker_id (et pas par audio_file_name),
@@ -107,11 +106,11 @@ def dowload_bonafide(adv_ids):
 
     Path("data/bonafide").mkdir(parents=True, exist_ok=True)
 
-    dowloaded = 0
+    downloaded = 0
     missing = []
     file_speaker_pairs = {}
 
-    for spk in tqdm(speakers, desc="Dowloading bonafide by speaker"):
+    for spk in tqdm(speakers, desc="Downloading bonafide by speaker"):
         # Tous les bonafide de ce speaker
         spk_samples = df_bonafide[df_bonafide["speaker_id"] == spk]
 
@@ -119,6 +118,10 @@ def dowload_bonafide(adv_ids):
             print(f"Aucun bonafide trouvé pour le speaker {spk}")
             missing.append(spk)
             continue
+
+        spk_samples = spk_samples.copy()
+        spk_samples["audio_len"] = spk_samples["audio"].apply(lambda a: len(a["bytes"]))
+        spk_samples = spk_samples.sort_values("audio_len", ascending=False)
 
         line = spk_samples.iloc[0]
         file_speaker_pairs[line["audio_file_name"]] = line["speaker_id"]
@@ -134,7 +137,7 @@ def dowload_bonafide(adv_ids):
         output_path = Path(f"data/bonafide/{spk}.wav")
         sf.write(output_path, data, sr)
 
-        dowloaded += 1
+        downloaded += 1
 
     if missing:
         pd.DataFrame({"speaker_id": missing}).to_csv(
@@ -147,5 +150,6 @@ def dowload_bonafide(adv_ids):
 
 
 if __name__ == "__main__":
-    adv_ids, bonafide_ids, all_needed_ids = parse_demo_configs()
-    # dowload_bonafide(adv_ids)
+    # adv_ids, bonafide_ids, all_needed_ids = parse_demo_configs()
+    adv_ids = pd.read_csv("data/metadata/adv_ids.csv")
+    download_bonafide(adv_ids)
