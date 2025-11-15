@@ -99,10 +99,11 @@ def download_bonafide(adv_ids):
 
     # key == 0 <=> bonafide dans ce dataset HF
     df_bonafide = df[df["key"] == 0].copy()
-
+    print(adv_ids)
     # Récupérer les lignes ADV pour connaître les speakers concernés
     adv_rows = df[df["audio_file_name"].isin(adv_ids)]
     speakers = adv_rows["speaker_id"].unique().tolist()
+    print(speakers)
 
     Path("data/bonafide").mkdir(parents=True, exist_ok=True)
 
@@ -151,5 +152,6 @@ def download_bonafide(adv_ids):
 
 if __name__ == "__main__":
     # adv_ids, bonafide_ids, all_needed_ids = parse_demo_configs()
-    adv_ids = pd.read_csv("data/metadata/adv_ids.csv")
+    adv_ids_df = pd.read_csv("data/metadata/adv_ids.csv")
+    adv_ids = adv_ids_df["file_id"].tolist()
     download_bonafide(adv_ids)
