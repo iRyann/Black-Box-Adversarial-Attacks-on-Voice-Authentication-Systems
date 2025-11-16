@@ -98,18 +98,18 @@ def download_bonafide(adv_ids):
     df = load_dataset("Bisher/ASVspoof_2019_LA", split="test").to_pandas()
 
     # key == 0 <=> bonafide dans ce dataset HF
-    df_bonafide = df[df["key"] == 0].copy()
-    print(adv_ids)
     # Récupérer les lignes ADV pour connaître les speakers concernés
     adv_rows = df[df["audio_file_name"].isin(adv_ids)]
     speakers = adv_rows["speaker_id"].unique().tolist()
-    print(speakers)
+    adv_map = adv_rows.groupby("speaker_id")["audio_file_name"].apply(list).to_dict()
+
+    with open("data/metadata/adv_ids_by_speaker.json", "w") as f:
+        json.dump(adv_map, f, indent=2)
 
     Path("data/bonafide").mkdir(parents=True, exist_ok=True)
 
     downloaded = 0
     missing = []
-    file_speaker_pairs = {}
 
     for spk in tqdm(speakers, desc="Downloading bonafide by speaker"):
         # Tous les bonafide de ce speaker
@@ -125,7 +125,6 @@ def download_bonafide(adv_ids):
         spk_samples = spk_samples.sort_values("audio_len", ascending=False)
 
         line = spk_samples.iloc[0]
-        file_speaker_pairs[line["audio_file_name"]] = line["speaker_id"]
         audio_dict = line["audio"]  # {'bytes': ..., 'path': ...}
         audio_bytes = audio_dict["bytes"]
 
@@ -144,10 +143,6 @@ def download_bonafide(adv_ids):
         pd.DataFrame({"speaker_id": missing}).to_csv(
             "data/metadata/bonafide_missing.csv", index=False
         )
-
-    pd.DataFrame(file_speaker_pairs).to_csv(
-        "data/metadata/file_speaker_pairs.csv", index=False
-    )
 
 
 if __name__ == "__main__":
