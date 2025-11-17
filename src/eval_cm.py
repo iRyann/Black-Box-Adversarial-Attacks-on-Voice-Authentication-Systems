@@ -1,8 +1,11 @@
-from speechbrain.inference.speaker import SpeakerRecognition
 import os
 
-def getSpeakerID(filename : str):
-    pass
+from speechbrain.inference.speaker import SpeakerRecognition
+
+
+def getSpeakerID(sample_name: str):
+    parts = sample_name.split("_")
+    return parts[1]
 
 
 def main():
@@ -25,18 +28,17 @@ def main():
         for spoof_adv in spoof_adv_files:
             if getSpeakerID(spoof_adv) == bonafide_id:
                 score, prediction = recognitionModel.verify_files(
-                    f"./data/bonafide/{bonafide}", 
-                    f"./data/spoof_adv/{spoof_adv}"
+                    f"./data/bonafide/{bonafide}", f"./data/spoof_adv/{spoof_adv}"
                 )
-                results_adv.append(bonafide_id,score,prediction)
+                results_adv.append(bonafide_id, score, prediction)
 
         for spoof_sota in spoof_sota_files:
             if getSpeakerID(spoof_sota) == bonafide_id:
                 score, prediction = recognitionModel.verify_files(
-                    f"./data/bonafide/{bonafide}", 
-                    f"./data/spoof_sota/{spoof_sota.wav}"
+                    f"./data/bonafide/{bonafide}", f"./data/spoof_sota/{spoof_sota.wav}"
                 )
-                results_sota.append(bonafide_id,score,prediction)
+                results_sota.append(bonafide_id, score, prediction)
+
 
 if __name__ == "__main__":
     main()

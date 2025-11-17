@@ -144,9 +144,11 @@ def download_bonafide(adv_ids):
             "data/metadata/bonafide_missing.csv", index=False
         )
 
+def rename_adv(file_descriptor_path : str):
+    pass
 
 if __name__ == "__main__":
     # adv_ids, bonafide_ids, all_needed_ids = parse_demo_configs()
-    adv_ids_df = pd.read_csv("data/metadata/adv_ids.csv")
-    adv_ids = adv_ids_df["file_id"].tolist()
-    download_bonafide(adv_ids)
+    #adv_ids_df = pd.read_csv("data/metadata/adv_ids.csv")
+    #adv_ids = adv_ids_df["file_id"].tolist()
+    #download_bonafide(adv_ids)
