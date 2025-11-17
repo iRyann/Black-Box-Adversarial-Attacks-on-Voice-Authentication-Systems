@@ -1,0 +1,17 @@
+speaker_id,sample_index,confidence,prediction
+17,0,1.000,Bonafide
+45,0,1.000,Bonafide
+45,1,1.000,Bonafide
+17,1,1.000,Bonafide
+45,2,1.000,Bonafide
+2,2,1.000,Bonafide
+32,3,1.000,Bonafide
+48,1,1.000,Bonafide
+32,1,1.000,Bonafide
+41,0,1.000,Bonafide
+48,0,1.000,Bonafide
+2,1,1.000,Bonafide
+41,1,1.000,Bonafide
+32,0,1.000,Bonafide
+2,0,1.000,Bonafide
+32,2,1.000,Bonafide

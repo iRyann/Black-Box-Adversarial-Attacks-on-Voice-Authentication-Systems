@@ -2,3 +2,4 @@ venv
 .venv
 pretrained_models
 weights
+**/__pycache__
