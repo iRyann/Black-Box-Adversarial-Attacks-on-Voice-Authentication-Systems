@@ -1,0 +1,17 @@
+speaker_id,sample_index,score,prediction
+48,1,0.667,True
+48,0,0.801,True
+32,3,0.655,True
+32,1,0.613,True
+32,0,0.617,True
+32,2,0.625,True
+17,0,0.766,True
+17,1,0.711,True
+45,0,0.807,True
+45,1,0.724,True
+45,2,0.584,True
+2,2,0.668,True
+2,1,0.582,True
+2,0,0.692,True
+41,0,0.889,True
+41,1,0.650,True
