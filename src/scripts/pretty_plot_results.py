@@ -152,7 +152,7 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
 for container in ax.containers:
     ax.bar_label(
         container,
-        fmt="%.1f%%",  # format correct
+        fmt="%.2f%%",
         labels=[v.get_height() * 100 for v in container],  # conversion → %
         label_type="edge",
         fontweight="bold",
