@@ -3,7 +3,7 @@ import os
 from speechbrain.inference.speaker import SpeakerRecognition
 
 
-def getSpeakerID(sample_name: str):
+def getSpeakerID(sample_name: str) -> str:
     parts = sample_name.split("_")
     return parts[1]
 
