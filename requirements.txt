@@ -12,3 +12,4 @@ matplotlib
 requests
 tqdm
 pyyaml
+transformers
