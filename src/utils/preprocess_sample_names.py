@@ -128,7 +128,6 @@ def rename_sota(path: str):
             continue
 
         spk = spk.lstrip("0")
-        idx = idx.lstrip("0")
 
         new_name = f"SOTA_{spk}_{idx}.wav"
         new_path = path / new_name
