@@ -1,4 +1,4 @@
-# Black-Box Adversarial Attacks on Voice Authentication — Plan Final
+# Black-Box Adversarial Attacks on Voice Authentication
 
 > Analyser *Breaking Security-Critical Voice Authentication* (Kassis & Hengartner, 2023) et évaluer si les transformations audio F1/F4/F6 conservent leur efficacité face aux spoofs générés par TTS/VC modernes (2025).
 
@@ -9,7 +9,7 @@
 - 2025 : Les TTS/VC ont progressé (naturalité accrue) : **les heuristiques F sont-elles obsolètes ?**
 
 ### Hypothèse
-> Les spoofs modernes (Coqui TTS, 2025) sont suffisamment naturels pour que F1/F4/F6 n'apportent aucun gain en attaque.
+> Les spoofs modernes (Index TTS, 2025) sont suffisamment naturels pour que F1/F4/F6 n'apportent aucun gain en attaque.
 
 ### Approche
 Comparaison expérimentale minimaliste :
@@ -59,79 +59,24 @@ Comparaison expérimentale minimaliste :
    - Input : Texte des 12 utterances bonafide + 3s d'audio référence/speaker
    - Output : 12 fichiers `.wav` (même format que bonafide)
 
-### Transformations
-Évaluation en l'absence des transformations, puis en ablation.
-
 ### Évaluation
 
 - ASV - Similarité locuteur** :
-   - Modèle : Resemblyzer (GE2E, embeddings 256-d)
+   - Modèle : ECAPA (pré-entraîné VoxCeleb)
    - Métrique : Cosine similarity (bonafide vs. spoof)
    - Seuil d'acceptation : Médiane des cosines intra-speaker bonafide
 
 - CM - Détection spoof :
-   - Modèle : AASIST (pré-entraîné ASVspoof2021, depuis repo upstream), ou tout autre jugé pertinent
+   - Modèle : AASIST
    - Métrique : Score CM (bonafide=1, spoof=0) + distribution
 
-
-
-### 4.3 Analyses complémentaires
-- **Spectrogrammes** : Visualiser F1/F4/F6 (avant/après)
-- **Écoute humaine** : Vous deux + 2 volontaires (20 échantillons aléatoires)
-- **Ablation** : Tester F1-only, F4-only, F6-only (si temps)
-
-## Limitations & perspectives
-
-### Limitations du MVP
+## Limitations du MVP
 - **Échantillon réduit** : 12 utterances (tendance, pas généralisation)
 - **1 TTS** : SOTA mais pas ElevenLabs/Azure
-- **1 CM** : AASIST (pas les 14 de l'article)
-- **Pas de STT** : Intelligibilité non mesurée (assume préservée)
+- **1 CM** : AASIST
+- **Pas de STT** : Intelligibilité non mesurée
 - **Pas de téléphonie** : Simulation 8 kHz non testée
-
-### Ouverture
-**Défenses post-2023** :
-- Adversarial training avec spoofs augmentés (F1-F7)
-- Détection multi-task (CM + STT + prosodie)
-- Watermarking obligatoire (réglementation EU AI Act)
-
-**Attaques futures** :
-- Adaptation en ligne (reinforcement learning)
-- Attaques multimodales (voix + vidéo deepfake)
-- Bypass des watermarks (model inversion)
-
-**Enjeux sociétaux** :
-- Biométrie vocale en production (banques, santé) -> risques réels
-- Course aux armements défense/attaque
-- Besoin de certification formelle (FIDO Alliance, ISO 30107)
-
-## Livrables
-
-### Rapport (5-7 pages)
-
-### Présentation (15 + 5 min)
-- **Subsomption** : Problématique, article, protocole, résultats, conclusion
-- **Démo live** : Écoute bonafide -> spoof -> spoof+F
-- **Q&A** (5 min)
-
-### Code
-
-## Checklist
-
-### MVP
-- [ ] **12 bonafide** VoxCeleb téléchargés et validés (écoute)
-- [ ] **12 spoofs** Coqui générés (qualité acceptable)
-- [ ] **F1/F4/F6** implémentés et testés (1 fichier transformé manuellement)
-- [ ] **Resemblyzer** : cosines calculées pour 3 conditions
-- [ ] **AASIST** : scores calculés pour 3 conditions
-- [ ] **Tableaux** : Metrics.csv complet (moy ± std)
-- [ ] **Figures** : 2 spectrogrammes + 1 boxplot cosines
-- [ ] **Rapport** : 5-7 pages, structure complète
-- [ ] **Slides** : 5 slides + démo audio prête
-
----
-
-## Références clés
-
+- 
+## Références
 1. Kassis, A., Hengartner, U. **Breaking Security-Critical Voice Authentication.** *IEEE Symposium on Security and Privacy (S&P)*, 2023. 
 2. Repo officiel : `github.com/andrekassis/Breaking-Security-Critical-Voice-Authentication`
