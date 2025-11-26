@@ -14,28 +14,38 @@
 %%%%%%%%%%%%%% PERSONAL COMMANDS
 \input{config/commands.tex}
 
+%%%%%%%%%%%%%% GLOSSARY
+\makeglossaries
+\input{glossary}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
+\tcbset{colback=red!5!white,colframe=red!75!black,fonttitle=\bfseries}
+
+\tikzstyle{descript} = [text = black, align=center, minimum height=1.8cm, outer sep=0pt, font=\footnotesize]
+\tikzstyle{activity} = [align=center, outer sep=1pt]
+
 %
 
 %entre crochet le titre court pour l'en tête puis le vrai titre
-\title[Classification EEG BCI IV 2a]{
-Classification EEG de l'Imagerie Motrice :\\
-{\large Deep Learning appliqué à la Neuro-ingénierie}
+\title[Contournement de l'authentification vocale]{
+L'Authentification Vocale, une témérité mercantile :\\
+{\large D'une attaque agnostique boîte noire, aux modèles génératifs}
 }
 \author{
 \large 
-Présentation de \important{Ryan BOUCHOU}\\[0.2cm]
+Présentation de \important{Ryan BOUCHOU} et \important{Ruben PETTENG NGONGANG}\\[0.2cm]
 %\footnotesize
 %travail réalisé avec \couleur{binôme}\\[0.4cm]
 \vspace*{-0.6cm}
 } 
 
 %entre crochet la short date pour l'en-tête
-\date[Mai 2025]{\vspace*{-2.5cm}19 juin 2025}
+\date[Mai 2025]{\vspace*{-2.5cm}\today}
 
-\institute[HEPL \& CY TECH]{\vspace*{-2cm}\includegraphics[scale=0.2]{config/img/logo.png}}
+\institute[CY TECH]{\vspace*{-2cm}\includegraphics[scale=0.2]{config/img/logo.png}}
 
 %------------------------------------------------
 \begin{frame}[plain]
@@ -44,15 +54,21 @@ Présentation de \important{Ryan BOUCHOU}\\[0.2cm]
 \end{frame}
 
 %------------------------------------------------
-\title[Classification EEG]{
+\title[Contournement de l'authentification vocale]{
 Une page de titre avec logos :\\
 {\large mais sans les affectations détaillées des auteurs }
 }
 
 %------------------------------------------------
-
-
 \include{src/header}
-\include{src/section1}
-\include{src/section2}
+\include{src/intro}
+%\include{debug}
+%\include{src/sota}
+%\include{src/quizz}
+%\include{src/demo}
+
+%------------------------------------------------
+\clearpage
+\printglossary
+
 \end{document}

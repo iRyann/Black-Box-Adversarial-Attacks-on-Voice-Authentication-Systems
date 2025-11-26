@@ -1,0 +1,113 @@
+\section{Introduction}
+
+%------------------------------------------------
+\subsection{Contextualisation}
+
+\begin{frame}{L'expression d'un besoin\esp}
+    Une \couleur{pression globalisante} :
+    \begin{itemize}
+        \item Massification des systèmes, à toutes les échelles et sous tous les jougs.
+        \item Besoin de fiabilité (\ie confidentialité, intégrité, non-répudiation).
+        \item Agilité processuelle à l'égard des usages.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Historialité : évolution du besoin d'authentification\esp}
+    Un \couleur{espace éthique}, perpétuellement remisé.
+    \begin{figure}[h!]
+    \center
+    \begin{tikzpicture}[very thick, black, scale=0.65]
+        \small
+        \coordinate (O)  at (-1,0);           % origine
+        \coordinate (P1) at (5,0);            % fin période 1 (~1980)
+        \coordinate (P2) at (10,0);           % fin période 2 (~2000)
+        \coordinate (P3) at (16,0);           % fin période 3 (~aujourd’hui)
+        \coordinate (F)  at (16,0);
+        
+        \pause
+        \fill[color=ColorOne!20] rectangle (O) -- (P1) -- ($(P1)+(0,1)$) -- ($(O)+(0,1)$);
+        \draw ($(P1)+(-3,0.5)$) node[activity,ColorOne] {\scriptsize{Confiance implicite}};
+        \draw[<-,thick,color=black] ($(P1)+(0,1)$) -- ($(P1)+(0,1.5)$) node [above=0pt,align=center,black] {~1980};
+        \draw[-] (O) -- (P1);
+        \draw(0 cm,3pt) -- (0 cm,-3pt);
+        \draw (0,0) node[below=3pt] {Années 60};
+        \draw(4 cm,3pt) -- (4 cm,-3pt);
+        \draw (4,0) node[below=3pt] {Années 70};
+        
+        \pause
+        \fill[color=ColorTwo!20] rectangle (P1) -- (P2) -- ($(P2)+(0,1)$) -- ($(P1)+(0,1)$);
+        \draw ($(P2)+(-2.5,0.5)$) node[activity,ColorTwo] {\scriptsize{Démocratisation de} \\[-0.1cm] \scriptsize{mots-de passe}};
+        \draw[<-,thick,color=black] ($(P2)+(0,1)$) -- ($(P2)+(0,1.5)$) node [above=0pt,align=center,black] {~2000};
+        \draw[-] (P1) -- (P2);
+        \draw(4 cm,3pt) -- (4 cm,-3pt);
+        \draw (4,0) node[below=3pt] {Années 70};
+        \draw(9 cm,3pt) -- (9 cm,-3pt);
+        \draw (9,0) node[below=3pt] {Années 90};
+        
+        \pause
+        \shade[left color=ColorThree, right color=white] rectangle (P2) -- (P3) -- ($(P3)+(0,1)$) -- ($(P2)+(0,1)$);
+        \draw ($(P3)+(-3,0.5)$) node[activity,ColorThree] {\scriptsize{Complexité, multi-facteurs}\\[-0.1cm] \scriptsize{et enjeux modernes}};
+        \draw[->] (P2) -- (F);
+        \draw(14 cm,3pt) -- (14 cm,-3pt);
+        \draw (14,0) node[below=3pt] {2010};
+        \pause
+        \node[descript,fill=ColorThree!15,text=ColorThree](D3) at ($(P3)+(-2,-3.5)$) {%
+        	\textbf{Bouleversement}\\
+        	Avènement du\\
+        	Machine Learning
+        };
+        \path[->,color=ColorThree]($(P3)+(-1,-0.1)$)  edge [out=-70, in=90]  ($(D3)+(0,1)$);
+    \end{tikzpicture}
+    \end{figure}
+\end{frame}
+
+%------------------------------------------------
+\subsection{Actualisation des enjeux}
+
+\begin{frame}{L'usurpation du \textit{soi}}
+    L'authentification biométrique, et en l’occurrence vocale, repose sur une information non sans connotation :
+    \pause
+    \begin{block}{Sémantique}
+    \textit{Les données biométriques sont des données à caractère personnel car elles permettent d’identifier une personne. Elles ont, pour la plupart, la particularité d’être \couleur{uniques et permanentes} (ADN, empreintes digitales, etc.). --- CNIL}
+    \end{block}
+    \pause
+    \begin{coder}
+        Un \gls{sav} repose sur le postulat que \important{le corps ne ment pas}.
+    \end{coder}
+    \pause
+    \dc \; L'IA générative oblige désormais à \important{l'authentification des machines \& de leurs productions}.
+\end{frame}
+
+\begin{frame}{Avénement du Machine Learning}
+    Avec l'arrivée des réseaux neuronaux :
+    \begin{itemize}
+        \item x-vectors,
+        \item ECAPA-TDNN,
+        \item end-to-end speaker verification,
+    \end{itemize}
+    \pause
+    le besoin de sécurité croît exponentiellement, car :
+    \begin{itemize}
+        \flch la voix peut être synthétisée,
+        \flch altérée,
+        \flch simulée,
+        \flch perturbée de façon adversariale.
+    \end{itemize}
+\end{frame}
+
+\subsection{La recherche en action}
+\begin{frame}{Un article à sensation\esp}
+    En 2021, l'étude \textit{Breaking Security-Critical Voice Authentication}
+    montre que même dans des conditions extrêmes, l’\acrshort{av} reste vulnérable à :
+    \pause
+    \begin{itemize}
+        \flch du spoofing,\pause
+        \flch des adversarial perturbations agnostiques,\pause
+        \flch des attaques low-cost et low Signal-to-Noise-Ratio (SNR)
+    \end{itemize}
+    \pause
+    Autrement dit :
+    \begin{coder}
+    la biométrie vocale n’est pas seulement faillible ; elle est fragile dans son principe même, car le modèle peut être trompé.
+    \end{coder}
+\end{frame}

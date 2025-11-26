@@ -4,6 +4,7 @@
 \newcommand{\ok}{\textcolor{vert}{\checkmark}}
 \newcommand{\point}{{\usebeamercolor[fg]{structure}$\bullet\enskip$}}
 \newcommand{\Point}{{\usebeamercolor[fg]{structure}$\bullet\enskip$}}
+\newcommand{\ie}{\textit{i.e.}\;}
 
 %styles
 \newcommand{\couleur}[1]{{\usebeamercolor[fg]{structure}#1}}
@@ -12,3 +13,18 @@
 
 %pour le template
 \newcommand{\lin}[1]{\mintinline{latex}{#1}}
+
+\newtcolorbox{coder}{
+enhanced,
+boxrule=0pt,frame hidden,
+borderline west={4pt}{0pt}{briqueRouge},
+colback=black!3!white,
+sharp corners
+}
+\newtcolorbox{codeb}{
+enhanced,
+boxrule=0pt,frame hidden,
+borderline west={4pt}{0pt}{vertdEau},
+colback=black!3!white,
+sharp corners
+}
