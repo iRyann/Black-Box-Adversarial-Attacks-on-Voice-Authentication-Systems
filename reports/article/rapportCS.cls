@@ -24,9 +24,10 @@
 \RequirePackage[left=3cm,right=3cm,top=3cm,bottom=2cm]{geometry} %Configuration de la page
 \usepackage[T1]{fontenc}
 
+\usepackage{glossaries}
 \usepackage{palatino}
 \usepackage{pdfpages}
-
+\usepackage[most]{tcolorbox}
 %-------------------- Informations sur le rapport ----------------------
 
 \newcommand{\mention}[1]{\renewcommand{\mention}{#1}}

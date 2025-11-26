@@ -2,8 +2,13 @@
 \usepackage{lipsum}
 \title{Rapport CentraleSupelec - Template} %Titre du fichier
 
-\begin{document}
+%%%%%%%%%%%%%% GLOSSARY
+\makeglossaries
+\input{glossary}
 
+
+\begin{document}
+\tcbset{colback=red!5!white,colframe=red!75!black,fonttitle=\bfseries}
 %----------- Informations du rapport ---------
 
 \logoentreprise{logos/logoGraphene.png}
@@ -68,5 +73,9 @@
 \newpage
 \appendix
 %\include{src/annexe}
+%------------------------------------------------
+\clearpage
+\printglossary
+
 
 \end{document}
